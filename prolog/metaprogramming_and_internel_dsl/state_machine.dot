@@ -1,0 +1,13 @@
+digraph StateMachine {
+    idle                  [label="Idle", sharp="box"]
+    active                [label="Active", sharp="box"]
+    waitingForDrawerOpen  [label="WaitingForDrawerOpen", sharp="box"]
+    waitingForLightOn     [label="WaitingForLightOn", sharp="box"]
+    unlockPannel          [label="UnlockPannel", sharp="box"]
+
+    idle -> active                       [label="doorClose"]
+    active -> waitingForDrawerOpen       [label="lightOn"]
+    active -> waitingForLightOn          [label="drawerOpen"]
+    waitingForDrawerOpen -> unlockPannel [label="lightOn"]
+    waitingForLightOn -> unlockPannel    [label="drawerOpen"]
+}
