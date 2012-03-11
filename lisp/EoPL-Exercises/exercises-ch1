@@ -1,0 +1,250 @@
+(define (assert v1 v2)
+  (cond
+    ((equal? v1 v2) #t)
+    (else v1)))
+  
+; Exercise 1.15
+; duple: Int*Sym->ListOf(Sym)
+(define duple 
+  (lambda (n e)
+    (cond
+      ((eqv? n 0) '())
+      (else (cons e (duple (- n 1) e))))))
+
+; Exercise 1.16
+; invert: Lst->Lst
+(define (invert lst)
+  (cond
+    ((null? lst) '())
+    (else (cons (list (cadar lst) (caar lst)) (cdr lst)))))
+
+; Exercise 1.17
+; down: Lst->Lst
+(define (down lst)
+  (cond
+    ((null? lst) '())
+    (else (cons (list (car lst)) (down (cdr lst))))))
+
+; exercise 1.18
+; swapper Sym*Sym*SLst->SLst
+(define (swapper s1 s2 slist)
+  (cond
+    ((null? slist) '())
+    ((list? (car slist)) (cons (swapper s1 s2 (car slist)) (swapper s1 s2 (cdr slist))))
+    ((eqv? (car slist) s1) (cons s2 (swapper s1 s2 (cdr slist))))
+    ((eqv? (car slist) s2) (cons s1 (swapper s1 s2 (cdr slist))))
+    (else (cons (car slist) (swapper s1 s2 (cdr slist))))))
+
+
+; Exercise 1.19
+; list-set: Lst*Int*Val->Lst
+(define (list-set lst n x)
+  (cond
+    ((eqv? n 0) (cons x (cdr lst)))
+    (else (cons (car lst) (list-set (cdr lst) (- n 1) x)))))
+; Test for list-set
+(assert (list-set '(a b c d) 2 '(1 2)) '(a b (1 2) d))
+(assert (list-ref (list-set '(a b c d) 3 '(1 5 10)) 3) '(1 5 10))
+
+; Exercise 1.20
+; count-occurrences: Sym*Lst->Int
+
+(define (count-occurrences s lst)
+  (cond
+    ((null? lst) 0)
+    ((eqv? s (car lst)) (+ 1 (count-occurrences s (cdr lst))))
+    ((list? (car lst)) (+ (count-occurrences s (car lst)) (count-occurrences s (cdr lst))))
+    (else (count-occurrences s (cdr lst)))))
+
+; Test for count-occurrneces
+(assert (count-occurrences 'x '((f x) y (((x z) x)))) 3)
+(assert (count-occurrences 'x '((f x) y (((x z) () x)))) 3)
+(assert (count-occurrences 'w '((f x) y (((x z) () x)))) 0)
+
+; Exercise 1.21
+; product: Lst*Lst->Lst
+(define (product sos1 sos2)
+  (cond
+    ((null? sos1) '())
+    ((null? sos2) '())
+    ((not (list? sos1)) (cons (list sos1 (car sos2)) (product sos1 (cdr sos2))))
+    (else (append (product (car sos1) sos2) (product (cdr sos1) sos2)))))
+
+; Test for product
+(assert (product '(a b c) '(x y)) '((a x) (a y) (b x) (b y) (c x) (c y)))
+
+;
+; There is a first version of count-occurrences:
+;(define (product sos1 sos2)
+;  (do-product sos1 sos1 '()))
+;
+;(define (do-product sos1 sos2 current-result)
+;  (cond
+;    ((null? sos1) current-result)
+;    (else (do-product (cdr sos1) sos2 (append (do-product-2 (car sos1) sos2 '()) current-result)))))
+;
+;(define (do-product-2 s lst current-result-1)
+;  (cond
+;    ((null? lst) current-result-1)
+;    (else (do-product-2 s (cdr lst) (cons (list s (car lst)) current-result-1)))))
+;
+
+; Exercise 1.22
+; filter-in: Lambda*Lst->Lst
+(define (filter-in pred lst)
+  (cond
+    ((null? lst) '())
+    ((pred (car lst)) (cons (car lst) (filter-in pred (cdr lst))))
+    (else (filter-in pred (cdr lst)))))
+; Test for filter-in
+(assert (filter-in number? '(a 2 (1 3) b 7)) '(2 7))
+(assert (filter-in symbol? '(a 2 (1 3) b 7)) '(a b))
+(assert (filter-in list? '(a 2 (1 3) b 7)) '((1 3)))
+
+; Exercise 1.23
+; list-index: Lambda*Lst->Val
+(define (list-index pred lst)
+  (do-list-index pred lst 0))
+(define (do-list-index pred lst index)
+  (cond
+    ((null? lst) #f)
+    ((pred (car lst)) index)
+    (else (do-list-index pred (cdr lst) (+ index 1)))))
+
+; Test list-index
+(assert (list-index number? '(a 2 (1 3) b 7)) 1)
+(assert (list-index symbol? '(a (b c) 17 foo)) 0)
+(assert (list-index symbol? '(1 2 (a b) 3)) #f)
+
+; Exercise 1.24
+; every?: Lambda*Lst->Bool
+(define (every? pred lst)
+  (cond
+    ((null? lst) #t)
+    ((pred (car lst)) (every? pred (cdr lst)))
+    (else #f)))
+; Test for every?
+(assert (every? number? '(1 2 3 4 5)) #t)
+(assert (every? number? '(1 2 a 4 5)) #f)
+
+; Exercise 1.25
+; exist?: Lambda*Lst->Bool
+(define (exist? pred lst)
+  (cond
+    ((null? lst) #f)
+    ((pred (car lst)) #t)
+    (else (exist? pred (cdr lst)))))
+(assert (exist? number? '(a b c 3 e)) #t)
+(assert (exist? number? '(a b c d e)) #f)
+
+; Exercise 1.26
+; up: Lst->Lst
+
+(define (up lst)
+  (cond
+    ((null? lst) '())
+    ((list? (car lst)) (append (car lst) (up (cdr lst))))
+    (else (cons (car lst) (up (cdr lst))))))
+; Test for exercise 1.26
+(assert (up '((1 2) (3 4))) '(1 2 3 4))
+(assert (up '((x (y)) z)) '(x (y) z))
+(assert (up (down '((x (y)) z))) '((x (y)) z))
+
+  
+; Exercise 1.31
+; Representation of binary-tree
+(define (leaf symbol) symbol)
+(define (interior-node root lson rson)
+  (list root lson rson))
+(define (leaf? is-leaf) (integer? is-leaf))
+(define (lson node)
+  (car (cdr node)))
+(define (rson node)
+  (car (cdr (cdr node))))
+(define contents-of #t)
+
+(assert (leaf 1) 1)
+(assert (leaf 2) 2)
+(assert (interior-node 'foo (leaf 1) (leaf 2)) '(foo 1 2))
+(assert (interior-node 'baz
+                       (interior-node 'bar 
+                                      (leaf 1) 
+                                      (interior-node 'foo (leaf 1) (leaf 2))) 
+                       (interior-node 'biz (leaf 4) (leaf 5)))
+        '(baz
+           (bar 1 (foo 1 2))
+           (biz 4 5)))
+
+(assert (lson (interior-node 'a (leaf 1) (leaf 2))) 1)
+(assert (rson (interior-node 'a (leaf 1) (interior-node 'b (leaf 2) (leaf 3)))) '(b 2 3))
+
+; Exercise 1.32
+(define (double-tree btree)
+  (cond
+    ((leaf? btree) (* btree 2))
+    (else (interior-node (car btree) (double-tree (lson btree)) (double-tree (rson btree))))))
+
+(assert (double-tree (leaf 1)) 2)
+(assert (double-tree (interior-node 'a (leaf 1) (leaf 2))) '(a 2 4))
+(assert (double-tree (interior-node 'a (leaf 1) (interior-node 'b (leaf 2) (leaf 3)))) '(a 2 (b 4 6)))
+
+; Exercise 1.33 I DON'T UNDERSTAND WHAT THIS EXERCISE MEANS.
+
+; Exercise 1.34
+(define (path n bst)
+  (cond
+    ((null? bst) #f)
+    ((eqv? (car bst) n) '())
+    ((> (car bst) n) (cons 'left (path n (car (cdr bst)))))
+    ((< (car bst) n) (cons 'right (path n (car (cddr bst)))))))
+
+(assert (path 17 '(17 () ())) '())
+(assert (path 17 '(14 (7 () (12 () ()))
+                      (26 (20 (17 () ())
+                              ())
+                          (31 () ())))) 
+        '(right left left))
+
+; Exercise 1.35
+(define (count-leaves btree)
+  (cond
+    ((leaf? btree) 1)
+    (else (+ (count-leaves (lson btree)) (count-leaves (rson btree))))))
+
+(define (number-leaves-with btree start)
+  (cond
+    ((leaf? btree) (leaf start))
+    (else (interior-node (car btree) 
+                   (number-leaves-with (lson btree) start)
+                   (number-leaves-with (rson btree) (+ start (count-leaves (lson btree))))))))
+
+(define (number-leaves btree)
+  (number-leaves-with btree 0))
+
+(assert (number-leaves (interior-node 'foo (leaf 3) (leaf 5))) '(foo 0 1))
+(assert (number-leaves (interior-node 'foo
+                         (interior-node 'bar
+                                        (leaf 26)
+                                        (leaf 12))
+                         (interior-node 'baz
+                                        (leaf 11)
+                                        (interior-node 'quux
+                                                       (leaf 117)
+                                                       (leaf 14)))))
+        '(foo
+          (bar 0 1)
+          (baz
+           2
+           (quux 3 4))))
+
+; Exercise 1.36
+; I DONN'T KNOW THE ANWSER.
+(define (g lst rest) 
+  (cons lst rest))
+(define (number-elements lst)
+  (if (null? lst) 
+      '()
+      (g (list 0 (car lst)) (number-elements (cdr lst)))))
+
+(assert (number-elements '()) '())
+(assert (number-elements '(a b c)) '((0 a) (0 b) (0 c)))

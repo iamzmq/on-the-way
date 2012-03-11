@@ -1,0 +1,63 @@
+(define (assert v1 v2)
+  (cond
+    ((equal? v1 v2) #t)
+    (else v1)))
+
+; Exercise 2.5
+; The a-list(association-list) representation of Env
+(define empty-env '())
+
+(define (extend-env var val env)
+  (list var val env))
+
+(define (apply-env env search-var)
+  (cond
+    ((eqv? env empty-env) "No binding found")
+    ((eqv? (car env) search-var) (cadr env))
+    (else (apply-env (caddr env) search-var))))
+
+(assert '() empty-env)
+(assert '(a 1 (b 2 ())) (extend-env 'a 1 (extend-env 'b 2 empty-env)))
+(assert "No binding found" (apply-env empty-env 'a) )
+(assert 1 (apply-env (extend-env 'a 1 empty-env) 'a) )
+(assert 2 (apply-env (extend-env 'a 1 (extend-env 'b 2 empty-env)) 'b) )
+(assert "No binding found" (apply-env (extend-env 'a 1 (extend-env 'b 2 empty-env)) 'c) )
+
+; Exercise 2.8
+; Add new interface: empty-env?
+(define (empty-env? env)
+  (eqv? env empty-env))
+(assert #t (empty-env? '()))
+(assert #f (empty-env? (extend-env 'a 1 empty-env)))
+
+; Exercise 2.9
+; Add new interface: has-binding?
+(define (has-binding? env search-var)
+  (cond
+    ((eqv? env empty-env) #f)
+    ((eqv? (car env) search-var) #t)
+    (else (has-binding? (caddr env) search-var))))
+
+(assert #f (has-binding? empty-env 'b))
+(assert #t (has-binding? (extend-env 'a 1 empty-env) 'a))
+(assert #f (has-binding? (extend-env 'a 1 empty-env) 'b))
+
+; Exercise 2.10 & 2.11
+; Add new interface: extend-env, which takes a list of variables, a list of values of the same length, and an environment as parameters.
+(define (extend-env* vars vals env)
+  (list vars vals env))
+(define (apply-env* env search-var)
+  (cond
+    ((eqv? empty-env env) "No binding found")
+    ((eqv? '() (car env)) (apply-env* (caddr env) search-var))
+    ((eqv? (caar env) search-var) (caadr env))
+    (else (apply-env* (list (cdar env) (cdadr env) (caddr env)) search-var))))
+
+(assert '((a b) (1 2) ((d) (3) ())) (extend-env* '(a b) '(1 2) (extend-env* '(d) '(3) empty-env)))
+(assert "No binding found" (apply-env* empty-env 'a))
+(assert 1 (apply-env* (extend-env* '(a b) '(1 2) (extend-env* '(c d) '(3 4) empty-env)) 'a))
+(assert 2 (apply-env* (extend-env* '(a b) '(1 2) (extend-env* '(c d) '(3 4) empty-env)) 'b))
+(assert 3 (apply-env* (extend-env* '(a b) '(1 2) (extend-env* '(c d) '(3 4) empty-env)) 'c))
+(assert 4 (apply-env* (extend-env* '(a b) '(1 2) (extend-env* '(c d) '(3 4) empty-env)) 'd))
+(assert "No binding found" (apply-env* (extend-env* '(a b) '(1 2) (extend-env* '(c d) '(3 4) empty-env)) 'e))
+
