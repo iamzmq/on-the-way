@@ -22,7 +22,36 @@
                   (s-t "Consultant Journey in #C#" 48)
                   (t "ThoughtWorks, Han Kai")))
 
+;
+; Map of Sydney
+;
 (slide (bitmap "consultant_journey/australia.gif"))
+
+;
+; Intruduction of client
+;
+(slide (bitmap "consultant_journey/suncorp.jpg"))
+
+;
+; Intruduction of myself
+; TODO photo of my business card
+
+
+;
+; 
+;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

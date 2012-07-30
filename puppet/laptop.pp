@@ -33,3 +33,11 @@ package { 'subversion':
 package { 'swi-prolog-nox':
     ensure => present,
 }
+
+package { 'vnc4server':
+    ensure => present,  
+}
+
+package { 'mysql-server-core-5.1':
+    ensure => present,
+}
