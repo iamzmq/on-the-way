@@ -1,6 +1,7 @@
 #lang slideshow
 
 (require graphics/graphics)
+(require slideshow/balloon)
 
 ; public functions
 (define (s-t content size) (text content (current-main-font) size))
@@ -13,28 +14,48 @@
       (show-slide)
       (current-font-size orig-font-size)))
 
+(define (variable v) (colorize (text v '(bold . modern) (current-font-size)) "brown"))
+(define (method m) (text m 'modern (current-font-size)))
+(define (string s) (colorize (text s '(bold . modern) (current-font-size)) "blue"))
+(define (number n) (colorize (text n '(bold . modern) (current-font-size)) "blue"))
+
+(define australia_map (bitmap "imgs/australia.gif"))
+
+
 ;
 ; WIP slide
 ;
 
-;
 ; End of WIP slide
 ;
-
 ;
 ; Part I - First impression of Sydney
 ;
 (slide #:name "slide intrduction"
        (vc-append (* gap-size 3)
-                  (s-t "雪梨城的六个月" 48)
+                  (s-t "Day in Sydney" 48)
                   (t "ThoughtWorks, Han Kai")))
 
 (slide #:name "self-intrduction"
-       (t "name.equals('Han Kai')")
-       (t "years_in_ThoughtWorks.equals(5)"))
+       (h (variable "name") 
+          (t ".") 
+          (method "equals") 
+          (string " 'Han Kai'"))
+       (h (variable "years_in_ThoughtWorks") 
+          (t ".") 
+          (method "equals") 
+          (number " 5")))
+
+(define positioin-of-sydney (blank))
 
 (slide #:name "map of sydney" 
-       (bitmap "imgs/australia.gif"))
+       (pin-over australia_map 540 210 positioin-of-sydney))
+
+(slide #:name "map of sydney" 
+       (pin-balloon (wrap-balloon (text "I'm here" (current-main-font) 18) 's 10 30)
+                    (pin-over australia_map 540 210 positioin-of-sydney)
+                    positioin-of-sydney
+                    rt-find))
 
 (slide #:name "client intrduction"  
        (bitmap "imgs/suncorp.jpg"))
@@ -44,11 +65,12 @@
              (bitmap "imgs/sydney-bridge.jpg"))
           (bitmap "imgs/sydney-beach.jpg")))
 
-(slide #:name "insurance sales men"
+(slide #:name "insurance salesman"
+       #:title "Insurance salesman"
        (bitmap "imgs/sydney-opera-insurancing-sales.jpg"))
 
 (slide #:name "food"
-       #:title "Wonderful food"
+       #:title "Food is nice!"
        (bitmap "imgs/see-food.jpg"))
 
 (slide #:name "blue mountain"
@@ -61,15 +83,14 @@
           (t " =    ")
           (s-t "Beijing" 48)))
 
-
 ;
 ; Days as QA
 ;
 (slide #:name "Join project"
        (h 
-        (t "Join")  
+        (t "From")  
         (text " LSP Home " '(bold . modern) 30) 
-        (t "from 22nd Jan, 2012")))
+        (t "at 22nd Jan, 2012")))
 
 (slide #:name "initiated meeting"
        #:title "Initiated Meeting"
@@ -84,17 +105,21 @@
        (t "TODO a photo is needed here."))
 
 (slide #:name "The days as a QA"
-       (t ""))
+       (t "TODO days of a QA"))
 
 ;
 ; Days in Continous Delivery
 ;
-(slide #:name "starting continous delivery"
+(slide #:name "starting continuous delivery"
+       #:title "Starting Continuous Delivery"
        (t "As a QA, I want to deploy package to test env smoothly, so that ")
        (t "I can verify new feature ASAP."))
 
 (slide #:name "enviroments"
-       (t ""))
+       (h (bitmap "imgs/env.gif")
+          (v (para "DEV SYS and UAT are lower level regions")
+             (para "DRYRUN and PROD are more complex"))))
+
 
 (slide #:name "phase 1"
        #:title "Phase 1 - Low level regions"
