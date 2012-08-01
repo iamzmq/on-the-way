@@ -1,0 +1,26 @@
+Hi Guys,
+
+This is still a difficult approach to adopt.
+
+To be honest we are asking Jenkins to try and do what Tableaux does (see below) and I still don’t understand why.
+
+We would need to be able to identify who migrates specific artefacts by u number, not just the team they are part of. There also needs to be a method to marry up ITSM data with this action (like the CR number for changes).
+
+We can spend a lot of time trying to get Jenkins to become PPG234 compliant (or BT change management compliant) – but I think it would be very difficult and not in our best interests.
+
+All we really need to do is wait for our API changes to be implemented (which allow for us to do what we need). This keeps the mechanism exactly what you are after and gives us even more options down the track for very very easy enhancement. It also gives the approval workflow we need for audit and allows that entire process to be invisible and out of the way.
+
+You’d just be emailing a CR number and the fact that a deployment has been clicked for a particular time. We’d just approve it and it would go at whatever time you entered. What we should be looking at is how you want to get that info to the API. You could capture it when they click that button, use a config file, hard code it in the script etc etc.
+
+It looks like we are dependent on this API change no matter which way we go. I’m expecting this to be done within a month or less.
+
+There’s also the other side of this:-
+Our team is currently implementing (and building continuously) the service and skills for Tableaux.
+There’s also a chance we are doing this for another deployment application (which I might add has the same requirements and the same problems at the moment).
+Asking us to also take on another application/gate/process/service/technology is not going to work for us.
+
+I thought there might be an easy solution for the meantime (until our API change) but it appears that is not the case.
+
+My recommendation is to plan for this feature implementation into Tableaux, and use the API enhancement to solve this problem.
+
+We need to start absorbing your script and actions into Tableaux and making this an enterprise grade process.
