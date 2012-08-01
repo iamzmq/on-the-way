@@ -4,29 +4,18 @@
 
 ; public functions
 (define (s-t content size) (text content (current-main-font) size))
-
-(define (ident x) x)
-
-
 (define v vl-append)
 (define h hc-append)
 
-(define (ps str) (s-ps str (current-font-size)))
-(define (highlight str) (s-highlight str (current-font-size)))
-(define (keyword str) (s-keyword str (current-font-size)))
-
-(define (s-ps str size) (text str 'modern size))
-(define (s-highlight str size) (colorize (text str '(bold . modern) size) "red"))
-(define (s-keyword str size) (colorize (text str '(bold . modern) size) "blue"))
-
-(define (change-font-size-for-slide font-size slide) 
-    (current-font-size 10)
-    slide
-    (current-font-size 32))
+(define (change-font-size-for-slide font-size show-slide) 
+    (let* ([orig-font-size (current-font-size)])
+      (current-font-size font-size)
+      (show-slide)
+      (current-font-size orig-font-size)))
 
 ;
 ; WIP slide
-; 
+;
 
 ;
 ; End of WIP slide
@@ -145,8 +134,8 @@
 (define (letter line)
   (para #:width (* 1.2 (current-para-width)) line))
 
-(current-font-size 15)
-(slide #:name "a bad letter from migration team"
+(define slide-of-migration-team-letter (lambda () 
+    (slide #:name "a bad letter from migration team"
        #:title "A Letter from migration team"
        (vl-append 15
                   (letter "Hi Guys,")
@@ -165,8 +154,9 @@
                              )
                   (letter "I thought there might be an easy solution for the meantime (until our API change) but it appears that is not the case.")
                   (letter "My recommendation is to plan for this feature implementation into Tableaux, and use the API enhancement to solve this problem.")
-                  (letter "We need to start absorbing your script and actions into Tableaux and making this an enterprise grade process.")))
-(current-font-size 32)
+                  (letter "We need to start absorbing your script and actions into Tableaux and making this an enterprise grade process.")))))
+
+(change-font-size-for-slide 12 slide-of-migration-team-letter)
 
 (slide #:name "lost faith"
        (h (t "I think I lost ") (tt "FAITH") (t ".")))
