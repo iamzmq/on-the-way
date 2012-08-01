@@ -1,1 +1,1 @@
-sed '/^$/d' letter_from_migrationteam.txt | awk '{print "(para #:width (* 1.2 (current-para-width))  \"" $0 "\")"}'
+sed '/^$/d' letter_from_migrationteam.txt | awk '{print "(letter  \"" $0 "\")"}'
