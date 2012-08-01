@@ -1,5 +1,7 @@
 #lang slideshow
 
+(require graphics/graphics)
+
 ; public functions
 (define (s-t content size) (text content (current-main-font) size))
 
@@ -24,7 +26,7 @@
 
 ;
 ; WIP slide
-;
+; 
 
 ;
 ; End of WIP slide
@@ -166,4 +168,29 @@
                   (letter "We need to start absorbing your script and actions into Tableaux and making this an enterprise grade process.")))
 (current-font-size 32)
 
+(slide #:name "lost faith"
+       (h (t "I think I lost ") (tt "FAITH") (t ".")))
+
+(slide #:name "the darkest days"
+       (t "The darkest days"))
+
+(slide #:name "Collaboration with infra team"
+       (item "Co-locate when possible")
+       (item "Bridge gaps between Online and Infra teams")
+       (item "Work closely with infra teams to solve problems")
+       (item "Treat other teams with respect")
+       (item "Learn from them and show them what automation can do"))
+
+(slide #:name "Collaboration with migration team"
+       (item "Engage early and often")
+       (item "Include them in the journey")
+       (item "Listen to their concerns and be ready to negotiate")
+       (item "Show the power of automation and impress them")
+       (item "Gain their trust"))
+
+(slide #:name "prod deployment"
+       #:title "Prod deployment"
+       (item "No big deal!")
+       (item "Click a button from Jenkins")
+       (item "During business hours (blue-green strategy)"))
 
